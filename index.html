@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Xử lý sự kiện bàn phím</title>
+    <style>
+        #box {
+            width: 100px;
+            height: 100px;
+            background-color: #e74c3c;
+            position: relative;
+            top: 0px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="box"></div>
+
+    <script>
+        // Lấy phần tử div cần dịch chuyển
+        const box = document.getElementById('box');
+        let posY = 0; // Lưu tọa độ top hiện tại
+        const speed = 20; // Bước dịch chuyển (px)
+
+        // Lắng nghe sự kiện keydown trên toàn trang
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowUp') {
+                posY -= speed; // Giảm giá trị để di chuyển lên
+                box.style.top = posY + 'px';
+                event.preventDefault(); // Ngăn trình duyệt cuộn trang
+            } 
+            else if (event.key === 'ArrowDown') {
+                posY += speed; // Tăng giá trị để di chuyển xuống
+                box.style.top = posY + 'px';
+                event.preventDefault(); // Ngăn trình duyệt cuộn trang
+            }
+        });
+    </script>
+
+</body>
+</html>
