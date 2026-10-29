@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập K4: Phân Trang Danh Sách</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        ul#item-list {
+            list-style-type: none;
+            padding: 0;
+            min-height: 250px;
+        }
+        ul#item-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+        ul#item-list li:nth-child(odd) {
+            background-color: #fafafa;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .pagination button:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Bài tập K4: Phân Trang Danh Sách</h2>
+    <p>Hiển thị danh sách 50 mục. Chỉ hiển thị 10 mục mỗi trang.</p>
+    
+    <!-- Danh sách hiển thị các mục -->
+    <ul id="item-list"></ul>
+
+    <!-- Khu vực các nút phân trang -->
+    <div class="pagination" id="pagination"></div>
+</div>
+
+<script>
+    // 1. Tạo dữ liệu giả lập gồm 50 mục
+    const items = [];
+    for (let i = 1; i <= 50; i++) {
+        items.push(`Mục số ${i}: Nội dung chi tiết của phần tử thứ ${i} trong danh sách.`);
+    }
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+
+    const itemListElement = document.getElementById('item-list');
+    const paginationElement = document.getElementById('pagination');
+
+    // 2. Hàm hiển thị danh sách theo trang
+    function displayList(itemsArray, wrapper, rowsPerPage, page) {
+        wrapper.innerHTML = "";
+        page--;
+
+        let start = rowsPerPage * page;
+        let end = start + rowsPerPage;
+        let paginatedItems = itemsArray.slice(start, end);
+
+        for (let i = 0; i < paginatedItems.length; i++) {
+            let item = paginatedItems[i];
+            let li = document.createElement('li');
+            li.innerText = item;
+            wrapper.appendChild(li);
+        }
+    }
+
+    // 3. Hàm tạo các nút phân trang
+	function setupPagination(itemsArray, wrapper, rowsPerPage) {
+        wrapper.innerHTML = "";
+        let pageCount = Math.ceil(itemsArray.length / rowsPerPage);
+
+        for (let i = 1; i < pageCount + 1; i++) {
+            let btn = paginationButton(i, itemsArray);
+            wrapper.appendChild(btn);
+        }
+    }
+
+    // 4. Tạo từng nút bấm phân trang
+    function paginationButton(page, itemsArray) {
+        let button = document.createElement('button');
+        button.innerText = page;
+
+        if (currentPage === page) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', function () {
+            currentPage = page;
+            displayList(itemsArray, itemListElement, itemsPerPage, currentPage);
+
+            // Cập nhật lại trạng thái active của nút
+            let currentBtn = document.querySelector('.pagination button.active');
+            currentBtn.classList.remove('active');
+            button.classList.add('active');
+        });
+
+        return button;
+    }
+
+    // Khởi chạy ứng dụng lần đầu
+    displayList(items, itemListElement, itemsPerPage, currentPage);
+    setupPagination(items, paginationElement, itemsPerPage);
+</script>
+
+</body>
+</html>
